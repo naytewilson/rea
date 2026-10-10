@@ -393,10 +393,10 @@ const lipoMatchesSlice = (
 };
 
 /**
- * Newer lipo names an arm64e ABI variant `arm64e.<variant>` (for example
- * `arm64e.v1` for pointer-auth ABI version 1). The FAT table names that slice
- * `arm64e`; its physical identity is still compared field by field.
+ * Versioned arm64e pointer-auth ABI names retain the ARM64E CPU subtype (2).
+ * The distinct arm64e.x1 CPU subtype (12) is decoded separately, so an x1
+ * label can never match an older arm64e FAT entry by name alone.
  */
 const lipoNameMatches = (reported: string, observed: string): boolean =>
   reported === observed ||
-  (observed === "arm64e" && /^arm64e\.[A-Za-z0-9_]+$/u.test(reported));
+  (observed === "arm64e" && /^arm64e\.v[0-9]+$/u.test(reported));
