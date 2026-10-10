@@ -231,7 +231,9 @@ export class BinarySession
         return err(new AnalysisCancelledError("open_binary"));
       const resolved = await resolve();
       if (!resolved.ok) return resolved;
-      const { target, route, sameTarget } = resolved.value;
+      const { route, sameTarget } = resolved.value;
+      // Resolved previews are caller-owned; retain our own artifact identity.
+      const target = structuredClone(resolved.value.target);
       const { profile } = route;
       if (isAborted(options.signal))
         return err(new AnalysisCancelledError("open_binary"));
@@ -252,7 +254,7 @@ export class BinarySession
           const imported = this.importAnalysisSnapshot(options.snapshot);
           if (!imported.ok) return imported;
         }
-        return ok(target);
+        return ok(structuredClone(target));
       }
       const previous = this.#active;
       this.#active = undefined;
@@ -324,7 +326,7 @@ export class BinarySession
           );
         }
       }
-      return ok(target);
+      return ok(structuredClone(target));
     });
   }
 
