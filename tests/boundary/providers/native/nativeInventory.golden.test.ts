@@ -25,7 +25,7 @@ import {
 import { createTestTempDirectory } from "../../../fixtures/temporaryDirectory.js";
 
 const signatureTarget = async (
-  signedArchitecture: "arm64" | "arm64e" = "arm64",
+  signedArchitecture: "arm64" | "arm64e" | "arm64e.x1" = "arm64",
 ) => {
   const path = join(
     await createTestTempDirectory("rea-native-inventory-"),
@@ -34,7 +34,12 @@ const signatureTarget = async (
   await writeFile(
     path,
     fatImage(
-      [CPU.x86_64, CPU[signedArchitecture]].map((cpu) => ({
+      [
+        CPU.x86_64,
+        signedArchitecture === "arm64e.x1"
+          ? { type: CPU.arm64e.type, subtype: 0x8000000c }
+          : CPU[signedArchitecture],
+      ].map((cpu) => ({
         cpu,
         bytes: machoImage({ cpu }),
       })),
@@ -73,7 +78,7 @@ it("reports unsigned slices when a universal Mach-O has mixed signatures", async
   const signedFixture = await fixture("codesign.txt");
   const unsigned = await fixture("dyld-inventory/codesign-unsigned.txt");
   const entitlements = await fixture("entitlements.xml");
-  for (const signedArchitecture of ["arm64", "arm64e"] as const) {
+  for (const signedArchitecture of ["arm64", "arm64e", "arm64e.x1"] as const) {
     const signed = signedFixture.replace(
       /^Format=.*$/mu,
       `Format=Mach-O universal (x86_64 ${signedArchitecture})`,
