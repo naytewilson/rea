@@ -279,6 +279,19 @@ describe("Mach-O load command reader: reads and validates universal binary slice
     }
   });
 
+  it("identifies arm64e.x1 by the exact ARM64 CPU subtype", async () => {
+    const cpu = { type: CPU.arm64e.type, subtype: 0x8000000c };
+    const facts = await read(fatImage([{ cpu, bytes: machoImage({ cpu }) }]));
+    if (facts.status !== "parsed") throw new Error(facts.status);
+    expect(facts.slices).toHaveLength(1);
+    expect(facts.slices[0]).toMatchObject({
+      architecture: "arm64e.x1",
+      cpu_type: CPU.arm64e.type,
+      cpu_subtype: 0x8000000c,
+      fat_cpu_subtype: 0x8000000c,
+    });
+  });
+
   it("retains physical slice identity and declared build platform", async () => {
     const thin = machoImage({ commands: [buildVersionCommand(7)] });
     const parsedThin = await read(thin);

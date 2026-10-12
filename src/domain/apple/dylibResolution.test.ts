@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 
 import {
+  dylibResolutionInputSchema,
   traceDylibLoading,
   type DylibTreeEntry,
   type DylibTreeView,
@@ -598,6 +599,25 @@ describe("dyld load order", () => {
 });
 
 describe("dyld slice compatibility and coverage", () => {
+  it("accepts an arm64e.x1 selection and preserves exact root architecture", async () => {
+    const request = { roots: [MAIN], architecture: "arm64e.x1" } as const;
+    expect(dylibResolutionInputSchema.safeParse(request).success).toBe(true);
+    const view = memoryView({
+      [MAIN]: executable({
+        architecture: "arm64e.x1",
+        cpu_subtype: 0x8000000c,
+      }),
+    });
+    const trace = await traceDylibLoading(view, request);
+    expect(trace.roots).toEqual([{ image: MAIN, architecture: "arm64e.x1" }]);
+    expect(trace.coverage.roots_without_architecture).toEqual([]);
+    const older = await traceDylibLoading(view, {
+      roots: [MAIN],
+      architecture: "arm64e",
+    });
+    expect(older.coverage.roots_without_architecture).toEqual([MAIN]);
+  });
+
   it("lets an x86_64h process load generic x86_64 but not arm64e load arm64", async () => {
     const files = {
       [MAIN]: parsed(

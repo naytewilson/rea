@@ -257,7 +257,8 @@ export class AnalysisSnapshotCache {
       parameters: input.parameters,
       execution: input.execution,
     });
-    this.#workflowEntries.set(entry.query_id, entry);
+    // Own the retained graph; the execution is still returned to its caller.
+    this.#workflowEntries.set(entry.query_id, structuredClone(entry));
   }
 
   /** Replay an exact provider-specific query, marking its cached provenance. */
@@ -328,7 +329,8 @@ export class AnalysisSnapshotCache {
       parameters,
       execution,
     });
-    this.#entries.set(entry.query_id, entry);
+    // Own the retained graph; the execution is still returned to its caller.
+    this.#entries.set(entry.query_id, structuredClone(entry));
   }
 
   /** Forget all target-bound entries. */

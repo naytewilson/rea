@@ -5,6 +5,34 @@ import { describe, expect } from "vitest";
 
 import { createTestTempDirectory } from "../../fixtures/temporaryDirectory.js";
 import { cliTest } from "../../support/cli/cliFixture.js";
+import type { TestProcesses } from "../../support/process/processFixture.js";
+
+const runRelativeJsonInput = (
+  processes: TestProcesses,
+  root: string,
+  filename: string,
+) => {
+  const moduleUrl = new URL("../../../dist/cliJsonInput.js", import.meta.url)
+    .href;
+  return processes.run(
+    process.execPath,
+    [
+      "--input-type=module",
+      "-e",
+      `import { parseCliJsonInput } from ${JSON.stringify(moduleUrl)};
+           console.log(JSON.stringify(await parseCliJsonInput(process.argv[1], "test-input")));`,
+      filename,
+    ],
+    {
+      cwd: root,
+      env: {
+        HOME: root,
+        XDG_CONFIG_HOME: root,
+        XDG_CACHE_HOME: root,
+      },
+    },
+  );
+};
 
 const JSON_COMMANDS = [
   ["inspect-analysis-view", "inspect-analysis-view"],
@@ -310,28 +338,7 @@ describe("compiled CLI parser with relative brace and bracket paths", () => {
         const root = await createTestTempDirectory("rea-cli-json-path-");
         const value = { selected: filename };
         await writeFile(join(root, filename), JSON.stringify(value));
-        const moduleUrl = new URL(
-          "../../../dist/cliJsonInput.js",
-          import.meta.url,
-        ).href;
-        const result = await processes.run(
-          process.execPath,
-          [
-            "--input-type=module",
-            "-e",
-            `import { parseCliJsonInput } from ${JSON.stringify(moduleUrl)};
-           console.log(JSON.stringify(await parseCliJsonInput(process.argv[1], "test-input")));`,
-            filename,
-          ],
-          {
-            cwd: root,
-            env: {
-              HOME: root,
-              XDG_CONFIG_HOME: root,
-              XDG_CACHE_HOME: root,
-            },
-          },
-        );
+        const result = await runRelativeJsonInput(processes, root, filename);
 
         expect(result.stdout).toBe(`${JSON.stringify({ ok: true, value })}\n`);
         expect(result.stderr).toBe("");
@@ -344,28 +351,7 @@ describe("compiled CLI parser with relative brace and bracket paths", () => {
       `keeps missing relative path diagnostics for ${filename}`,
       async ({ processes }) => {
         const root = await createTestTempDirectory("rea-cli-json-missing-");
-        const moduleUrl = new URL(
-          "../../../dist/cliJsonInput.js",
-          import.meta.url,
-        ).href;
-        const result = await processes.run(
-          process.execPath,
-          [
-            "--input-type=module",
-            "-e",
-            `import { parseCliJsonInput } from ${JSON.stringify(moduleUrl)};
-           console.log(JSON.stringify(await parseCliJsonInput(process.argv[1], "test-input")));`,
-            filename,
-          ],
-          {
-            cwd: root,
-            env: {
-              HOME: root,
-              XDG_CONFIG_HOME: root,
-              XDG_CACHE_HOME: root,
-            },
-          },
-        );
+        const result = await runRelativeJsonInput(processes, root, filename);
 
         expect(JSON.parse(result.stdout.trim())).toMatchObject({
           ok: false,

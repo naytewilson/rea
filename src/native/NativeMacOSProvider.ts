@@ -933,7 +933,7 @@ const codeSignArchitectures = (
     const architectures = universal
       .split(/\s+/u)
       .filter((architecture) =>
-        /^(?:i386|x86_64|armv7|arm64|arm64e)$/u.test(architecture),
+        /^(?:i386|x86_64|armv7|arm64|arm64e|arm64e\.x1)$/u.test(architecture),
       );
     if (architectures.length > 0) return [...new Set(architectures)];
   }

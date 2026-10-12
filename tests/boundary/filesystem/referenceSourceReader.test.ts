@@ -142,10 +142,14 @@ describe("readReferenceSource failures and exclusions", () => {
     });
 
     if (!result.ok) throw result.error;
-    expect(checked).toEqual([
-      ["ignored", "directory"],
-      ["kept", "file"],
-    ]);
+    // Directory entry enumeration has no callback-order guarantee.
+    expect(checked).toHaveLength(2);
+    expect(checked).toEqual(
+      expect.arrayContaining([
+        ["ignored", "directory"],
+        ["kept", "file"],
+      ]),
+    );
     expect(result.value.entries.map(({ path }) => path)).toEqual(["kept"]);
   });
 
