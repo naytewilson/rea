@@ -4,6 +4,11 @@ Pushes to main automatically open or refresh a Release Please PR with the next
 version and changelog. Review its migration notes and wait for its current CI
 checks to pass. Merging that PR into main starts publication automatically.
 
+The release workflow refuses to create a tag when the candidate's Git tag or
+npm name/version is already claimed. Both remote Git and npm queries must
+succeed; an unreachable registry is not evidence of an available version. This
+matters for forks whose upstream package version may already exist.
+
 The Release workflow validates the merged release metadata and ancestry before
 creating a tag. npm and MCP Registry publication use the exact reviewed merge
 SHA returned by Release Please. Later main commits cannot change that source.
@@ -201,9 +206,11 @@ branches.
 ## Partial publication and retries
 
 Inspect the failed job and public registry state before retrying. When npm is
-already published, the npm job verifies that exact version instead of
-publishing it again. Re-run failed jobs in the original publication run so its
-release SHA and outputs stay fixed. If only MCP publication failed, retry that
+already published, the npm job checks registry-hosted provenance against the
+exact repository, commit, and package digest before reusing it. An upstream
+release with the same number cannot satisfy this fork's publication. Re-run
+failed jobs in the original publication run so its release SHA and outputs stay
+fixed. If only MCP publication failed, retry that
 job after checking that the npm canary succeeded.
 
 A branch tip that moved after dispatch fails before Release Please creates a

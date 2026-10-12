@@ -80,6 +80,9 @@ jobs:
           node scripts/verify-release-checkpoint.mjs \
             --phase publish --release-branch main --source-sha "$SOURCE_SHA"
 
+      - name: Refuse an already-claimed release identity
+        run: node scripts/verify-unclaimed-release.mjs
+
       - uses: googleapis/release-please-action@v4
         id: release
         with:
@@ -192,6 +195,10 @@ jobs:
           --phase "$RELEASE_PHASE" --release-branch "$RELEASE_BRANCH"
           --source-sha "$SOURCE_SHA"
 
+      - name: Refuse an already-claimed publish identity
+        if: inputs.phase == 'publish'
+        run: node scripts/verify-unclaimed-release.mjs
+
       - uses: googleapis/release-please-action@v4
         id: release
         with:
@@ -292,11 +299,14 @@ jobs:
 
       - name: Publish
         shell: bash
+        env:
+          EXPECTED_RELEASE_SHA: ${{ needs.merged-release.outputs.sha || needs.release-please.outputs.sha }}
         run: |
           version="$(node --input-type=module -e 'import packageJson from "./package.json" with { type: "json" }; process.stdout.write(packageJson.version)')"
           published_version="$(npm view "rea-agents@${version}" version --json 2>/dev/null || true)"
           if [ "${published_version}" = "\"${version}\"" ]; then
-            echo "rea-agents@${version} is already published; verifying the existing package."
+            # A registry match is not enough: require matching registry provenance identity.
+            node scripts/verify-existing-published-release.mjs "${version}" "${EXPECTED_RELEASE_SHA}"
           else
             tag="$(node scripts/release-npm-tag.mjs "${version}")"
             npm publish --access public --tag "${tag}"
