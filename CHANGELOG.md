@@ -8,7 +8,7 @@
 * **web:** WebScriptExportError accepts error context and residual paths in an options object.
 * **reference:** Reference source readers and imports require an ArtifactResourceScope. VCS metadata reads return Result, and CLI import failures include observed details and partial evidence.
 * **javascript:** readJavaScriptArtifactFiles now requires ArtifactResourceScope as its third argument; the optional abort signal is fourth.
-* **publication:** retain cleanup owners across export workflows
+* **publication:** Direct web-script export API callers must now pass a caller-owned `ArtifactResourceScope` to `exportWebScripts` and `exportWebScriptsValidated` and keep it alive until export work is finished; CLI/MCP adapters retain this owner through shutdown. Treat descriptor cleanup failures as partial observations and retry owner cleanup without repeating successful publication. ([be75ed5](https://github.com/naytewilson/rea/commit/be75ed5e4b4bfb146af497f8fa5d172a1ea19462))
 * **artifacts:** Injected ASAR unpacked handles expose fd and read instead of createReadStream.
 * **artifacts:** ArtifactResourceScope file-handle owners require OwnedFileHandle. Root inventory sources retain their single cleanup owner.
 * **artifacts:** Direct artifact inventory/extraction and JavaScript analysis APIs require an explicit caller-owned ArtifactResourceScope. CLI and MCP input contracts are unchanged.
@@ -54,6 +54,7 @@
 * **native:** inspect oversized retained function dossiers via bounded views ([a9ee236](https://github.com/naytewilson/rea/commit/a9ee2360fd11332b2cc50ef7130a89321b828d28))
 * **native:** return a retained summary view of binary layouts on request ([#1570](https://github.com/naytewilson/rea/issues/1570)) ([5156ba4](https://github.com/naytewilson/rea/commit/5156ba44c58f1361e8b6304fcd1cb092eaa85de9))
 * **process:** report live capture progress through CLI and MCP ([706bba6](https://github.com/naytewilson/rea/commit/706bba6e13ed27faf34c79149aa4927938139dab))
+* **setup:** add native Pi MCP client support with strict JSON configuration validation and isolated invalid-path errors ([#1376](https://github.com/morluto/rea/pull/1376)) ([9e22da8](https://github.com/naytewilson/rea/commit/9e22da845bf8b447f81539e0ba57d5deb59e9103))
 * **setup:** register OMP during setup ([#1301](https://github.com/naytewilson/rea/issues/1301)) ([8b4c359](https://github.com/naytewilson/rea/commit/8b4c3591358ee59297d8298ede1b63d08459d817))
 * **skills:** improve Codex onboarding and task recovery ([#1613](https://github.com/naytewilson/rea/issues/1613)) ([2653b19](https://github.com/naytewilson/rea/commit/2653b194b695879dcb1d290feca56301282594bc))
 * **website:** add a blog for methods and project notes ([b09d02d](https://github.com/naytewilson/rea/commit/b09d02d93cbadfa0ced21e7c489c7d47fb317228))
