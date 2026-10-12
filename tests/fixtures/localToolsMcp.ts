@@ -1,12 +1,14 @@
 import { Client } from "@modelcontextprotocol/client";
 import { StdioClientTransport } from "@modelcontextprotocol/client/stdio";
 import { Ajv2020 } from "ajv/dist/2020.js";
+import { tmpdir } from "node:os";
 import { fileURLToPath } from "node:url";
 import { expect, onTestFinished } from "vitest";
 import { z } from "zod";
 
 /** Start the built production server without configuring deep binary providers. */
 export async function connectLocalToolsMcp() {
+  const temporaryDirectory = tmpdir();
   const transport = new StdioClientTransport({
     command: process.execPath,
     args: [
@@ -15,6 +17,10 @@ export async function connectLocalToolsMcp() {
     ],
     env: {
       PATH: process.env.PATH ?? "/usr/bin:/bin",
+      // Preserve the test-owned scratch root without forwarding host secrets.
+      ...(process.platform === "win32"
+        ? { TMP: temporaryDirectory, TEMP: temporaryDirectory }
+        : { TMPDIR: temporaryDirectory }),
       REA_LOG_LEVEL: "silent",
       HOPPER_LAUNCHER_PATH: "/rea-unconfigured-deep-provider/hopper",
     },
