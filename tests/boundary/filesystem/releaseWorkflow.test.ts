@@ -149,6 +149,33 @@ it("validates the reviewed merge before creating its release", async () => {
   });
 });
 
+it("checks remote Git tags and npm publication before either release-creation path", async () => {
+  const workflow = await readReleaseWorkflow();
+  for (const [jobName, expectedStep, expectedCondition] of [
+    ["merged-release", "Refuse an already-claimed release identity", undefined],
+    [
+      "release-please",
+      "Refuse an already-claimed publish identity",
+      "inputs.phase == 'publish'",
+    ],
+  ] as const) {
+    const steps = workflow.jobs[jobName].steps;
+    const guardIndex = steps.findIndex((step) => step.name === expectedStep);
+    const releaseIndex = steps.findIndex((step) =>
+      step.uses?.startsWith("googleapis/release-please-action@"),
+    );
+    const checkpointIndex = steps.findIndex((step) =>
+      step.run?.includes("verify-release-checkpoint.mjs"),
+    );
+    expect(guardIndex).toBeGreaterThan(checkpointIndex);
+    expect(guardIndex).toBeLessThan(releaseIndex);
+    expect(steps[guardIndex]?.if).toBe(expectedCondition);
+    expect(steps[guardIndex]?.run).toBe(
+      "node scripts/verify-unclaimed-release.mjs",
+    );
+  }
+});
+
 it("keeps frozen candidate preparation and publication explicit", async () => {
   const workflow = await readReleaseWorkflow();
   expect(workflow.on.workflow_dispatch).toMatchObject({
@@ -636,4 +663,18 @@ it("requires package verification before publishing and retains the registry can
       .slice(publish + 1)
       .some((command) => command.includes("verify-published-package.mjs")),
   ).toBe(true);
+});
+
+it("never reuses an existing npm version without matching release provenance", async () => {
+  const steps = (await readReleaseWorkflow()).jobs.publish.steps;
+  const publish = steps.find((step) => step.name === "Publish");
+  expect(publish?.env?.EXPECTED_RELEASE_SHA).toBe(
+    "$" +
+      "{{ needs.merged-release.outputs.sha || needs.release-please.outputs.sha }}",
+  );
+  expect(publish?.run).toContain(
+    "scripts/verify-existing-published-release.mjs",
+  );
+  expect(publish?.run).toContain("EXPECTED_RELEASE_SHA");
+  expect(publish?.run).toContain("npm publish --access public");
 });
