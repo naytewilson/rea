@@ -83,7 +83,7 @@ Sustituye Notes por la aplicación objetivo y especifica la función que quieres
 Inspecciona un directorio extraído de una aplicación JavaScript/Electron o un archivo ASAR:
 
 ```bash
-npx -y rea-agents@latest analyze-javascript-application /absolute/path/to/app --json
+npx -y rea-agents-nayte@latest analyze-javascript-application /absolute/path/to/app --json
 ```
 
 El resultado incluye módulos, importaciones, límites de Electron y sus pruebas. Sustituye la ruta por la de tu objetivo, por ejemplo `"D:/apps/example"` en Windows.

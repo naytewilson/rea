@@ -83,7 +83,7 @@ npx rea-agents-nayte setup
 Перевірте розпакований каталог застосунку JavaScript/Electron або файл ASAR:
 
 ```bash
-npx -y rea-agents@latest analyze-javascript-application /absolute/path/to/app --json
+npx -y rea-agents-nayte@latest analyze-javascript-application /absolute/path/to/app --json
 ```
 
 Результат містить модулі, імпорти, межі Electron і підтвердження для них. Замініть шлях своїм, наприклад `"D:/apps/example"` у Windows.

@@ -83,7 +83,7 @@ Ganti Notes dengan aplikasi target dan fitur yang ingin Anda pahami.
 Periksa direktori aplikasi JavaScript/Electron yang telah diekstrak atau berkas ASAR:
 
 ```bash
-npx -y rea-agents@latest analyze-javascript-application /absolute/path/to/app --json
+npx -y rea-agents-nayte@latest analyze-javascript-application /absolute/path/to/app --json
 ```
 
 Hasilnya mencakup modul, impor, batas antarkomponen Electron, dan bukti yang mendasarinya. Ganti jalur tersebut dengan lokasi target Anda, misalnya `"D:/apps/example"` di Windows.

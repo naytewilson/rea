@@ -83,7 +83,7 @@ npx rea-agents-nayte setup
 ตรวจสอบไดเรกทอรีแอป JavaScript/Electron ที่แตกไฟล์แล้ว หรือไฟล์ ASAR:
 
 ```bash
-npx -y rea-agents@latest analyze-javascript-application /absolute/path/to/app --json
+npx -y rea-agents-nayte@latest analyze-javascript-application /absolute/path/to/app --json
 ```
 
 ผลลัพธ์ประกอบด้วยโมดูล การนำเข้า ขอบเขตของ Electron และหลักฐาน แทนที่พาธด้วยเป้าหมายของคุณ เช่น `"D:/apps/example"` บน Windows

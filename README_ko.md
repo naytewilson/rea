@@ -83,7 +83,7 @@ Notes를 대상 앱으로 바꾸고 이해하고 싶은 기능을 지정하세�
 압축을 푼 JavaScript/Electron 앱 디렉터리 또는 ASAR를 검사합니다.
 
 ```bash
-npx -y rea-agents@latest analyze-javascript-application /absolute/path/to/app --json
+npx -y rea-agents-nayte@latest analyze-javascript-application /absolute/path/to/app --json
 ```
 
 결과에는 모듈, 임포트, Electron 경계와 관련 근거가 포함됩니다. 경로를 분석할 대상으로 바꾸세요. Windows에서는 `"D:/apps/example"` 같은 경로를 사용할 수 있습니다.

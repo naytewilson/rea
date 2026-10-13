@@ -83,7 +83,7 @@ Zastąp Notes wybraną aplikacją i wskaż funkcję, którą chcesz zrozumieć.
 Przeanalizuj rozpakowany katalog aplikacji JavaScript/Electron lub archiwum ASAR:
 
 ```bash
-npx -y rea-agents@latest analyze-javascript-application /absolute/path/to/app --json
+npx -y rea-agents-nayte@latest analyze-javascript-application /absolute/path/to/app --json
 ```
 
 Wynik obejmuje moduły, importy, granice komponentów Electron oraz dowody. Zastąp ścieżkę ścieżką do swojego celu, na przykład `"D:/apps/example"` w systemie Windows.

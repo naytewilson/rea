@@ -83,7 +83,7 @@ npx rea-agents-nayte setup
 检查已解包的 JavaScript/Electron 应用目录或 ASAR 文件：
 
 ```bash
-npx -y rea-agents@latest analyze-javascript-application /absolute/path/to/app --json
+npx -y rea-agents-nayte@latest analyze-javascript-application /absolute/path/to/app --json
 ```
 
 结果包含模块、导入、Electron 边界及相关证据。将路径替换为你的目标路径，例如 Windows 上的 `"D:/apps/example"`。

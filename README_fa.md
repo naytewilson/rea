@@ -75,7 +75,7 @@ npx rea-agents-nayte setup
 برای بررسی پوشهٔ استخراج‌شدهٔ یک برنامهٔ JavaScript/Electron یا فایل ASAR:
 
 ```bash
-npx -y rea-agents@latest analyze-javascript-application /absolute/path/to/app --json
+npx -y rea-agents-nayte@latest analyze-javascript-application /absolute/path/to/app --json
 ```
 
 نتیجه شامل ماژول‌ها، importها، مرزهای Electron و شواهد مربوط به آن‌هاست. مسیر را با مسیر برنامهٔ هدف جایگزین کنید؛ مثلاً در ویندوز `"D:/apps/example"`.

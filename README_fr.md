@@ -84,7 +84,7 @@ Remplacez Notes par votre application cible et la fonctionnalité que vous voule
 Inspectez le répertoire extrait ou l'archive ASAR d'une application JavaScript/Electron :
 
 ```bash
-npx -y rea-agents@latest analyze-javascript-application /absolute/path/to/app --json
+npx -y rea-agents-nayte@latest analyze-javascript-application /absolute/path/to/app --json
 ```
 
 Le résultat comprend les modules, les imports, les frontières Electron et les preuves associées. Remplacez le chemin par votre cible, par exemple `"D:/apps/example"` sous Windows.

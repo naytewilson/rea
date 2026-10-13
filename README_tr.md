@@ -83,7 +83,7 @@ Notes yerine hedef uygulamanızı ve anlamak istediğiniz özelliği belirtin.
 Çıkarılmış bir JavaScript/Electron uygulama dizinini veya ASAR dosyasını inceleyin:
 
 ```bash
-npx -y rea-agents@latest analyze-javascript-application /absolute/path/to/app --json
+npx -y rea-agents-nayte@latest analyze-javascript-application /absolute/path/to/app --json
 ```
 
 Sonuç; modülleri, içe aktarmaları, Electron sınırlarını ve bunlara ilişkin kanıtları içerir. Yolu hedefinizle değiştirin; Windows'ta örneğin `"D:/apps/example"` kullanabilirsiniz.

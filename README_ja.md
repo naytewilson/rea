@@ -83,7 +83,7 @@ Notes を対象のアプリに置き換え、理解したい機能を指定し�
 展開済みの JavaScript/Electron アプリのディレクトリ、または ASAR を調べます。
 
 ```bash
-npx -y rea-agents@latest analyze-javascript-application /absolute/path/to/app --json
+npx -y rea-agents-nayte@latest analyze-javascript-application /absolute/path/to/app --json
 ```
 
 結果にはモジュール、インポート、Electron の境界と、それらの根拠が含まれます。パスは対象に合わせて変更してください。Windows では、たとえば `"D:/apps/example"` を指定します。
