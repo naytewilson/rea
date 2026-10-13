@@ -64,4 +64,17 @@ describe("independent fork bootstrap workflow", () => {
     expect(steps[mcp]?.run).toContain("mcp-publisher login github-oidc");
     expect(steps[release]?.run).toContain('"${actual}" != "${GITHUB_SHA}"');
   });
+
+  it("uses the current package name for real recorded-crash installation", async () => {
+    const manifest = JSON.parse(
+      await readFile(join(root, "package.json"), "utf8"),
+    );
+    const workflow = await readFile(
+      join(root, ".github/workflows/real-recorded-crash.yml"),
+      "utf8",
+    );
+    expect(workflow).toContain(
+      "node_modules/" + manifest.name + "/scripts/rea.mjs",
+    );
+  });
 });
