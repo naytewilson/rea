@@ -22,7 +22,7 @@
 
 [Mulai Cepat](#mulai-cepat) · [Cara Kerja REA](#cara-kerja-rea) · [Hal yang Dapat Anda Analisis](#hal-yang-dapat-anda-analisis) · [Contoh Penggunaan](#contoh-penggunaan) · [FAQ](#faq) · [Dokumentasi](#dokumentasi)
 
-<code>npx rea-agents setup</code>
+<code>npx rea-agents-nayte setup</code>
 
 <br />
 
@@ -63,7 +63,7 @@ Proses penyiapan mendaftarkan REA ke agen Anda dan memasang instruksi alur kerja
 Dengan Node.js dan npm yang telah terpasang, jalankan:
 
 ```bash
-npx rea-agents setup
+npx rea-agents-nayte setup
 ```
 
 Pilih agen yang ingin digunakan, tinjau perubahan yang diusulkan, lalu setujui perubahan tersebut. Proses penyiapan menambahkan server MCP REA dan instruksi alur kerja yang sesuai, serta membuat cadangan konfigurasi yang sudah ada. Setelah itu, mulai ulang agen Anda.
@@ -83,7 +83,7 @@ Ganti Notes dengan aplikasi target dan fitur yang ingin Anda pahami.
 Periksa direktori aplikasi JavaScript/Electron yang telah diekstrak atau berkas ASAR:
 
 ```bash
-npx -y rea-agents@latest analyze-javascript-application /absolute/path/to/app --json
+npx -y rea-agents-nayte@latest analyze-javascript-application /absolute/path/to/app --json
 ```
 
 Hasilnya mencakup modul, impor, batas antarkomponen Electron, dan bukti yang mendasarinya. Ganti jalur tersebut dengan lokasi target Anda, misalnya `"D:/apps/example"` di Windows.
@@ -91,7 +91,7 @@ Hasilnya mencakup modul, impor, batas antarkomponen Electron, dan bukti yang men
 Untuk memasang perintah `rea` agar dapat digunakan secara rutin:
 
 ```bash
-npm install --global rea-agents
+npm install --global rea-agents-nayte
 rea --help
 ```
 
@@ -112,10 +112,10 @@ Untuk memperbarui pendaftaran agen dan skill Anda, jalankan perintah penyiapan y
 Jika Anda menggunakan `npx`, perbarui penyiapan agen dengan:
 
 ```bash
-npx rea-agents@latest setup
+npx rea-agents-nayte@latest setup
 ```
 
-Tinjau perubahan penyiapan dan mulai ulang agen Anda. Untuk menjalankan perintah CLI sekali pakai, gunakan `npx rea-agents@latest` diikuti dengan perintah yang diinginkan.
+Tinjau perubahan penyiapan dan mulai ulang agen Anda. Untuk menjalankan perintah CLI sekali pakai, gunakan `npx rea-agents-nayte@latest` diikuti dengan perintah yang diinginkan.
 
 ## Cara Kerja REA
 
@@ -221,7 +221,7 @@ Lihat [startup dan pemecahan masalah Hopper](docs/installation.md#launcher-paths
 <details>
 <summary><strong>Apa fungsi memasang skill dari skills.sh?</strong></summary>
 
-Skill tersebut menyediakan instruksi investigasi untuk agen Anda. Gunakan `npx rea-agents setup` untuk mendaftarkan server MCP REA dan memasang instruksi yang sesuai, lalu mulai ulang agen Anda.
+Skill tersebut menyediakan instruksi investigasi untuk agen Anda. Gunakan `npx rea-agents-nayte setup` untuk mendaftarkan server MCP REA dan memasang instruksi yang sesuai, lalu mulai ulang agen Anda.
 
 Lihat [instalasi khusus skill](docs/installation.md#skill-only-installation).
 
@@ -255,7 +255,7 @@ rea update
 Untuk penyiapan agen melalui `npx`:
 
 ```bash
-npx rea-agents@latest setup
+npx rea-agents-nayte@latest setup
 ```
 
 Jika Anda menggunakan agen, selesaikan [pembaruan penyiapan](#perbarui-rea) dan mulai ulang agen tersebut.

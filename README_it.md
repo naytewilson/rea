@@ -22,7 +22,7 @@
 
 [Quick start](#quick-start) · [Come funziona REA](#come-funziona-rea) · [Cosa puoi analizzare](#cosa-puoi-analizzare) · [Showcase](#showcase) · [FAQ](#faq) · [Documentazione](#documentazione)
 
-<code>npx rea-agents setup</code>
+<code>npx rea-agents-nayte setup</code>
 
 <br />
 
@@ -63,7 +63,7 @@ La configurazione registra REA con il tuo agente e installa le istruzioni di wor
 Con Node.js e npm installati, esegui:
 
 ```bash
-npx rea-agents setup
+npx rea-agents-nayte setup
 ```
 
 Scegli i tuoi agenti, rivedi le modifiche proposte e approvale. La configurazione aggiunge il server MCP di REA e le istruzioni di workflow corrispondenti, con backup della configurazione esistente. Riavvia quindi il tuo agente.
@@ -84,7 +84,7 @@ Sostituisci Note con la tua app di destinazione e la funzionalità che vuoi capi
 Ispeziona una directory di app JavaScript/Electron estratta o un ASAR:
 
 ```bash
-npx -y rea-agents@latest analyze-javascript-application /percorso/assoluto/verso/app --json
+npx -y rea-agents-nayte@latest analyze-javascript-application /percorso/assoluto/verso/app --json
 ```
 
 Il risultato include moduli, import, confini Electron e le relative prove. Sostituisci il percorso con il tuo bersaglio, ad esempio `"D:/apps/example"` su Windows.
@@ -92,7 +92,7 @@ Il risultato include moduli, import, confini Electron e le relative prove. Sosti
 Per installare il comando `rea` per un uso regolare:
 
 ```bash
-npm install --global rea-agents
+npm install --global rea-agents-nayte
 rea --help
 ```
 
@@ -113,10 +113,10 @@ Per aggiornare le registrazioni del tuo agente e lo skill, esegui il comando di 
 Se usi `npx`, aggiorna la configurazione del tuo agente con:
 
 ```bash
-npx rea-agents@latest setup
+npx rea-agents-nayte@latest setup
 ```
 
-Rivedi le modifiche di configurazione e riavvia il tuo agente. Per comandi CLI singoli, usa `npx rea-agents@latest` seguito dal comando.
+Rivedi le modifiche di configurazione e riavvia il tuo agente. Per comandi CLI singoli, usa `npx rea-agents-nayte@latest` seguito dal comando.
 
 ## Come funziona REA
 
@@ -206,7 +206,7 @@ REA avvia Hopper quando un'operazione ne ha bisogno. Su macOS, una finestra di d
 <details>
 <summary><strong>Cosa fa l'installazione dello skill da skills.sh?</strong></summary>
 
-Lo skill fornisce istruzioni di indagine per il tuo agente. Usa `npx rea-agents setup` per registrare il server MCP di REA e installare le istruzioni corrispondenti, quindi riavvia il tuo agente. Vedi [installazione solo skill](docs/installation.md#skill-only-installation).
+Lo skill fornisce istruzioni di indagine per il tuo agente. Usa `npx rea-agents-nayte setup` per registrare il server MCP di REA e installare le istruzioni corrispondenti, quindi riavvia il tuo agente. Vedi [installazione solo skill](docs/installation.md#skill-only-installation).
 
 </details>
 
@@ -238,7 +238,7 @@ rea update
 Per la configurazione dell'agente tramite `npx`:
 
 ```bash
-npx rea-agents@latest setup
+npx rea-agents-nayte@latest setup
 ```
 
 Se stai usando un agente, completa l'[aggiornamento della configurazione](#aggiorna-rea) e riavvialo. Riprova lo stesso task. Se il problema persiste, [apri un issue](https://github.com/morluto/rea/issues) con la tua versione di REA, il tipo di bersaglio, i passaggi per riprodurlo e l'output di errore.
