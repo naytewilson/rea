@@ -66,7 +66,7 @@ const writeSkill = async (content: string): Promise<string> => {
 };
 
 const staleCodex =
-  '[mcp_servers.rea]\ncommand = "npx"\nargs = ["-y", "rea-agents@0.1.0", "mcp"]\n';
+  '[mcp_servers.rea]\ncommand = "npx"\nargs = ["-y", "rea-agents-nayte@0.1.0", "mcp"]\n';
 const action = {
   id: "configure_client:codex",
   kind: "configure_client",
@@ -135,7 +135,7 @@ describe("existing REA integration maintenance", () => {
     );
     await writeClient(
       "opencode",
-      '{"mcp":{"rea":{"type":"local","command":["npx","-y","rea-agents@0.1.0","mcp"],"enabled":false}}}',
+      '{"mcp":{"rea":{"type":"local","command":["npx","-y","rea-agents-nayte@0.1.0","mcp"],"enabled":false}}}',
     );
     await writeClient(
       "vscode",
