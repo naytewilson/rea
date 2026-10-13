@@ -22,7 +22,7 @@
 
 [Inicio rápido](#inicio-rápido) · [Cómo funciona REA](#cómo-funciona-rea) · [Qué puedes analizar](#qué-puedes-analizar) · [Casos prácticos](#casos-prácticos) · [Preguntas frecuentes](#preguntas-frecuentes) · [Documentación](#documentación)
 
-<code>npx rea-agents setup</code>
+<code>npx rea-agents-nayte setup</code>
 
 <br />
 
@@ -63,7 +63,7 @@ La configuración registra REA en tu agente e instala las instrucciones de traba
 Con Node.js y npm instalados, ejecuta:
 
 ```bash
-npx rea-agents setup
+npx rea-agents-nayte setup
 ```
 
 Elige tus agentes, revisa los cambios propuestos y apruébalos. La configuración añade el servidor MCP de REA y las instrucciones de trabajo correspondientes, con copias de seguridad de la configuración existente. Reinicia tu agente al terminar.
@@ -91,7 +91,7 @@ El resultado incluye módulos, importaciones, límites de Electron y sus pruebas
 Para instalar el comando `rea` y usarlo habitualmente:
 
 ```bash
-npm install --global rea-agents
+npm install --global rea-agents-nayte
 rea --help
 ```
 
@@ -112,10 +112,10 @@ Para actualizar los registros de tus agentes y la skill, ejecuta el comando de c
 Si usas `npx`, actualiza la configuración de tu agente con:
 
 ```bash
-npx rea-agents@latest setup
+npx rea-agents-nayte@latest setup
 ```
 
-Revisa los cambios de configuración y reinicia tu agente. Para ejecutar comandos de CLI puntuales, usa `npx rea-agents@latest` seguido del comando.
+Revisa los cambios de configuración y reinicia tu agente. Para ejecutar comandos de CLI puntuales, usa `npx rea-agents-nayte@latest` seguido del comando.
 
 ## Cómo funciona REA
 
@@ -205,7 +205,7 @@ REA inicia Hopper cuando una operación lo necesita. En macOS, puede aparecer un
 <details>
 <summary><strong>¿Qué hace la instalación de la skill desde skills.sh?</strong></summary>
 
-La skill proporciona instrucciones de investigación a tu agente. Usa `npx rea-agents setup` para registrar el servidor MCP de REA e instalar las instrucciones correspondientes; después reinicia tu agente. Consulta [instalación solo de la skill](docs/installation.md#skill-only-installation).
+La skill proporciona instrucciones de investigación a tu agente. Usa `npx rea-agents-nayte setup` para registrar el servidor MCP de REA e instalar las instrucciones correspondientes; después reinicia tu agente. Consulta [instalación solo de la skill](docs/installation.md#skill-only-installation).
 
 </details>
 
@@ -237,7 +237,7 @@ rea update
 Para configurar el agente mediante `npx`:
 
 ```bash
-npx rea-agents@latest setup
+npx rea-agents-nayte@latest setup
 ```
 
 Si usas un agente, completa la [actualización de la configuración](#actualiza-rea) y reinícialo. Repite la misma tarea. Si el problema continúa, [abre una issue](https://github.com/morluto/rea/issues) con tu versión de REA, el tipo de objetivo, los pasos para reproducirlo y la salida del error.

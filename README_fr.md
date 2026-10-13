@@ -22,7 +22,7 @@
 
 [Démarrage rapide](#démarrage-rapide) · [Comment fonctionne REA](#comment-fonctionne-rea) · [Ce que vous pouvez analyser](#ce-que-vous-pouvez-analyser) · [Études de cas](#études-de-cas) · [Questions fréquentes](#questions-fréquentes) · [Documentation](#documentation)
 
-<code>npx rea-agents setup</code>
+<code>npx rea-agents-nayte setup</code>
 
 <br />
 
@@ -63,7 +63,7 @@ Setup enregistre REA auprès de votre agent et installe les instructions de work
 Une fois Node.js et npm installés, exécutez :
 
 ```bash
-npx rea-agents setup
+npx rea-agents-nayte setup
 ```
 
 Choisissez vos agents, vérifiez les modifications proposées et approuvez-les. Setup ajoute le serveur MCP de REA et les instructions de workflow correspondantes, et sauvegarde la configuration existante. Redémarrez ensuite votre agent.
@@ -92,7 +92,7 @@ Le résultat comprend les modules, les imports, les frontières Electron et les 
 Pour installer la commande `rea` pour un usage régulier :
 
 ```bash
-npm install --global rea-agents
+npm install --global rea-agents-nayte
 rea --help
 ```
 
@@ -113,10 +113,10 @@ Pour actualiser les enregistrements de vos agents et le skill, exécutez la comm
 Si vous utilisez `npx`, mettez à jour la configuration de votre agent avec :
 
 ```bash
-npx rea-agents@latest setup
+npx rea-agents-nayte@latest setup
 ```
 
-Vérifiez les modifications proposées par Setup et redémarrez votre agent. Pour des commandes CLI ponctuelles, utilisez `npx rea-agents@latest` suivi de la commande.
+Vérifiez les modifications proposées par Setup et redémarrez votre agent. Pour des commandes CLI ponctuelles, utilisez `npx rea-agents-nayte@latest` suivi de la commande.
 
 ## Comment fonctionne REA
 
@@ -206,7 +206,7 @@ REA lance Hopper lorsqu'une opération en a besoin. Sous macOS, une boîte de di
 <details>
 <summary><strong>Que fait l'installation du skill depuis skills.sh ?</strong></summary>
 
-Le skill fournit des instructions d'investigation à votre agent. Utilisez `npx rea-agents setup` pour enregistrer le serveur MCP de REA et installer les instructions correspondantes, puis redémarrez votre agent. Consultez [l'installation du skill seul](docs/installation.md#skill-only-installation).
+Le skill fournit des instructions d'investigation à votre agent. Utilisez `npx rea-agents-nayte setup` pour enregistrer le serveur MCP de REA et installer les instructions correspondantes, puis redémarrez votre agent. Consultez [l'installation du skill seul](docs/installation.md#skill-only-installation).
 
 </details>
 
@@ -238,7 +238,7 @@ rea update
 Pour une configuration d'agent via `npx` :
 
 ```bash
-npx rea-agents@latest setup
+npx rea-agents-nayte@latest setup
 ```
 
 Si vous utilisez un agent, terminez l'[actualisation de la configuration](#mettre-à-jour-rea) et redémarrez-le. Relancez la même tâche. Si le problème persiste, [ouvrez une issue](https://github.com/morluto/rea/issues) en indiquant votre version de REA, le type de cible, les étapes pour reproduire le problème et la sortie d'erreur.

@@ -22,7 +22,7 @@
 
 [البدء السريع](#البدء-السريع) · [كيف يعمل REA](#كيف-يعمل-rea) · [ما الذي يمكنك تحليله](#ما-الذي-يمكنك-تحليله) · [دراسات الحالة](#دراسات-الحالة) · [الأسئلة الشائعة](#الأسئلة-الشائعة) · [التوثيق](#التوثيق)
 
-<code>npx rea-agents setup</code>
+<code>npx rea-agents-nayte setup</code>
 
 <br />
 
@@ -63,7 +63,7 @@
 بعد تثبيت Node.js وnpm، نفّذ:
 
 ```bash
-npx rea-agents setup
+npx rea-agents-nayte setup
 ```
 
 اختر الوكلاء، وراجع التغييرات المقترحة، ثم وافق عليها. يضيف الإعداد خادم MCP الخاص بـ REA وتعليمات سير العمل المطابقة، مع الاحتفاظ بنسخ احتياطية من الإعدادات الموجودة. أعد تشغيل وكيلك بعد ذلك.
@@ -91,7 +91,7 @@ npx -y rea-agents@latest analyze-javascript-application /absolute/path/to/app --
 لتثبيت أمر `rea` للاستخدام المعتاد:
 
 ```bash
-npm install --global rea-agents
+npm install --global rea-agents-nayte
 rea --help
 ```
 
@@ -112,10 +112,10 @@ rea update
 إذا كنت تستخدم `npx`، فحدّث إعداد وكيلك بالأمر التالي:
 
 ```bash
-npx rea-agents@latest setup
+npx rea-agents-nayte@latest setup
 ```
 
-راجع تغييرات الإعداد وأعد تشغيل وكيلك. لأوامر CLI التي تنفّذها مرة واحدة، استخدم `npx rea-agents@latest` متبوعًا بالأمر المطلوب.
+راجع تغييرات الإعداد وأعد تشغيل وكيلك. لأوامر CLI التي تنفّذها مرة واحدة، استخدم `npx rea-agents-nayte@latest` متبوعًا بالأمر المطلوب.
 
 ## كيف يعمل REA
 
@@ -207,7 +207,7 @@ npx rea-agents@latest setup
 <details>
 <summary><strong>ماذا يفعل تثبيت المهارة من skills.sh؟</strong></summary>
 
-توفّر المهارة تعليمات الاستقصاء لوكيلك. استخدم `npx rea-agents setup` لتسجيل خادم MCP الخاص بـ REA وتثبيت التعليمات المطابقة، ثم أعد تشغيل وكيلك. راجع [تثبيت المهارة وحدها](docs/installation.md#skill-only-installation).
+توفّر المهارة تعليمات الاستقصاء لوكيلك. استخدم `npx rea-agents-nayte setup` لتسجيل خادم MCP الخاص بـ REA وتثبيت التعليمات المطابقة، ثم أعد تشغيل وكيلك. راجع [تثبيت المهارة وحدها](docs/installation.md#skill-only-installation).
 
 </details>
 
@@ -239,7 +239,7 @@ rea update
 لإعداد الوكيل عبر `npx`:
 
 ```bash
-npx rea-agents@latest setup
+npx rea-agents-nayte@latest setup
 ```
 
 إذا كنت تستخدم وكيلًا، فأكمل [تحديث الإعداد](#تحديث-rea) وأعد تشغيله. أعد محاولة المهمة نفسها. إذا استمرت المشكلة، [افتح issue](https://github.com/morluto/rea/issues) يتضمن إصدار REA، ونوع الهدف، وخطوات إعادة الإنتاج، ومخرجات الخطأ.

@@ -29,7 +29,7 @@ const transport = new StdioClientTransport({
   args: [
     "exec",
     "--yes",
-    `--package=rea-agents@${version}`,
+    `--package=rea-agents-nayte@${version}`,
     "--",
     "rea",
     "mcp",
@@ -90,7 +90,7 @@ try {
 }
 
 process.stdout.write(
-  `${JSON.stringify({ verifier_run: await completeVerifierRun(verifierRun), package: "rea-agents", version, mcpTools: publishedToolCount, canonicalMcpTools: CATALOG_IDENTITY.counts.mcp_tools, update })}\n`,
+  `${JSON.stringify({ verifier_run: await completeVerifierRun(verifierRun), package: "rea-agents-nayte", version, mcpTools: publishedToolCount, canonicalMcpTools: CATALOG_IDENTITY.counts.mcp_tools, update })}\n`,
 );
 
 async function verifyPublishedUpdate({ version: targetVersion, canaryRoot }) {
@@ -130,7 +130,7 @@ async function verifyPublishedUpdate({ version: targetVersion, canaryRoot }) {
       "--ignore-scripts",
       "--prefix",
       prefix,
-      `rea-agents@${previousVersion}`,
+      `rea-agents-nayte@${previousVersion ?? targetVersion}`,
     ],
     { cwd: canaryRoot, env: environment, maxBuffer: 16 * 1024 * 1024 },
   );
@@ -141,6 +141,34 @@ async function verifyPublishedUpdate({ version: targetVersion, canaryRoot }) {
       env: environment,
     })
   ).stdout.trim();
+  // On the first publication of an independent fork, no older version exists.
+  // Verify a clean installation and CLI before later releases exercise upgrades.
+  if (previousVersion === null) {
+    const installed = JSON.parse(
+      await readFile(join(npmRoot, "rea-agents-nayte", "package.json"), "utf8"),
+    );
+    if (
+      installed.name !== "rea-agents-nayte" ||
+      installed.version !== targetVersion
+    )
+      throw new Error(
+        "First-release npm installation did not match the published identity.",
+      );
+    const help = (
+      await execFileAsync(join(prefix, "bin", "rea"), ["--help"], {
+        cwd: canaryRoot,
+        env: environment,
+      })
+    ).stdout;
+    if (!/^\s{2}update\s/mu.test(help))
+      throw new Error("First-release CLI did not expose its update command.");
+    return {
+      status: "bootstrap",
+      previousVersion: null,
+      latestVersion: targetVersion,
+      installedVersion: installed.version,
+    };
+  }
   // Older releases may predate the update command. Exercise the new published
   // updater's production workflow against that real previous installation.
   const updaterPrefix = join(canaryRoot, "updater");
@@ -153,18 +181,18 @@ async function verifyPublishedUpdate({ version: targetVersion, canaryRoot }) {
       "--no-package-lock",
       "--prefix",
       updaterPrefix,
-      `rea-agents@${targetVersion}`,
+      `rea-agents-nayte@${targetVersion}`,
     ],
     { cwd: canaryRoot, env: environment, maxBuffer: 16 * 1024 * 1024 },
   );
-  const updaterRoot = join(updaterPrefix, "node_modules", "rea-agents");
+  const updaterRoot = join(updaterPrefix, "node_modules", "rea-agents-nayte");
   const harness = join(canaryRoot, "update.mjs");
   await writeFile(
     harness,
     `
 import { runUpdate } from ${JSON.stringify(pathToFileURL(join(updaterRoot, "dist/application/Update.js")).href)};
 import { systemUpdateHost } from ${JSON.stringify(pathToFileURL(join(updaterRoot, "dist/application/UpdateRuntime.js")).href)};
-const result = await runUpdate(${JSON.stringify(previousVersion)}, systemUpdateHost(${JSON.stringify(join(npmRoot, "rea-agents"))}, ${JSON.stringify(home)}), "structured");
+const result = await runUpdate(${JSON.stringify(previousVersion)}, systemUpdateHost(${JSON.stringify(join(npmRoot, "rea-agents-nayte"))}, ${JSON.stringify(home)}), "structured");
 process.stdout.write(JSON.stringify(result));
 if (result.status === "failed") process.exitCode = 1;
 `,
@@ -180,14 +208,14 @@ if (result.status === "failed") process.exitCode = 1;
     result.previousVersion !== previousVersion ||
     result.latestVersion !== targetVersion ||
     result.installedVersion !== targetVersion ||
-    result.command.at(-1) !== `rea-agents@${targetVersion}`
+    result.command.at(-1) !== `rea-agents-nayte@${targetVersion}`
   )
     throw new Error(
       `Published REA updater did not update ${previousVersion} to ${targetVersion}: ${stdout}`,
     );
 
   const installed = JSON.parse(
-    await readFile(join(npmRoot, "rea-agents", "package.json"), "utf8"),
+    await readFile(join(npmRoot, "rea-agents-nayte", "package.json"), "utf8"),
   );
   if (installed.version !== targetVersion)
     throw new Error(
@@ -216,19 +244,15 @@ if (result.status === "failed") process.exitCode = 1;
 async function findPreviousPublishedVersion(targetVersion, cwd, environment) {
   const { stdout } = await execFileAsync(
     "npm",
-    ["view", "rea-agents", "versions", "--json"],
+    ["view", "rea-agents-nayte", "versions", "--json"],
     { cwd, env: environment, maxBuffer: 16 * 1024 * 1024 },
   );
   const versions = JSON.parse(stdout);
-  const previous = versions
+  const previous = (Array.isArray(versions) ? versions : [versions])
     .filter(
       (candidate) =>
         typeof candidate === "string" && lt(candidate, targetVersion),
     )
     .sort(rcompare)[0];
-  if (previous === undefined)
-    throw new Error(
-      `No published rea-agents version precedes ${targetVersion}`,
-    );
-  return previous;
+  return previous ?? null;
 }

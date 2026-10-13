@@ -22,7 +22,7 @@
 
 [เริ่มต้นอย่างรวดเร็ว](#เริ่มต้นอย่างรวดเร็ว) · [REA ทำงานอย่างไร](#rea-ทำงานอย่างไร) · [สิ่งที่วิเคราะห์ได้](#สิ่งที่วิเคราะห์ได้) · [ตัวอย่างการใช้งาน](#ตัวอย่างการใช้งาน) · [คำถามที่พบบ่อย](#คำถามที่พบบ่อย) · [เอกสาร](#เอกสาร)
 
-<code>npx rea-agents setup</code>
+<code>npx rea-agents-nayte setup</code>
 
 <br />
 
@@ -63,7 +63,7 @@ REA เชื่อมเอเจนต์ของคุณกับเคร�
 เมื่อติดตั้ง Node.js และ npm แล้ว ให้เรียกใช้:
 
 ```bash
-npx rea-agents setup
+npx rea-agents-nayte setup
 ```
 
 เลือกเอเจนต์ ตรวจสอบการเปลี่ยนแปลงที่เสนอ แล้วอนุมัติ ขั้นตอนตั้งค่าจะเพิ่มเซิร์ฟเวอร์ MCP ของ REA และคำแนะนำการทำงานที่ตรงกัน พร้อมสำรองการตั้งค่าที่มีอยู่ จากนั้นเริ่มเอเจนต์ใหม่
@@ -91,7 +91,7 @@ npx -y rea-agents@latest analyze-javascript-application /absolute/path/to/app --
 หากต้องการติดตั้งคำสั่ง `rea` สำหรับใช้งานเป็นประจำ:
 
 ```bash
-npm install --global rea-agents
+npm install --global rea-agents-nayte
 rea --help
 ```
 
@@ -112,10 +112,10 @@ rea update
 หากใช้ `npx` ให้อัปเดตการตั้งค่าเอเจนต์ด้วย:
 
 ```bash
-npx rea-agents@latest setup
+npx rea-agents-nayte@latest setup
 ```
 
-ตรวจสอบการเปลี่ยนแปลงการตั้งค่าและเริ่มเอเจนต์ใหม่ สำหรับคำสั่ง CLI ที่ใช้ครั้งเดียว ให้ใช้ `npx rea-agents@latest` ตามด้วยคำสั่งที่ต้องการ
+ตรวจสอบการเปลี่ยนแปลงการตั้งค่าและเริ่มเอเจนต์ใหม่ สำหรับคำสั่ง CLI ที่ใช้ครั้งเดียว ให้ใช้ `npx rea-agents-nayte@latest` ตามด้วยคำสั่งที่ต้องการ
 
 ## REA ทำงานอย่างไร
 
@@ -205,7 +205,7 @@ REA เริ่ม Hopper เมื่อการดำเนินการ�
 <details>
 <summary><strong>การติดตั้งสกิลจาก skills.sh ทำอะไร?</strong></summary>
 
-สกิลให้คำแนะนำการตรวจสอบแก่เอเจนต์ ใช้ `npx rea-agents setup` เพื่อลงทะเบียนเซิร์ฟเวอร์ MCP ของ REA และติดตั้งคำแนะนำที่ตรงกัน แล้วเริ่มเอเจนต์ใหม่ ดู[การติดตั้งเฉพาะสกิล](docs/installation.md#skill-only-installation)
+สกิลให้คำแนะนำการตรวจสอบแก่เอเจนต์ ใช้ `npx rea-agents-nayte setup` เพื่อลงทะเบียนเซิร์ฟเวอร์ MCP ของ REA และติดตั้งคำแนะนำที่ตรงกัน แล้วเริ่มเอเจนต์ใหม่ ดู[การติดตั้งเฉพาะสกิล](docs/installation.md#skill-only-installation)
 
 </details>
 
@@ -237,7 +237,7 @@ rea update
 สำหรับการตั้งค่าเอเจนต์ผ่าน `npx`:
 
 ```bash
-npx rea-agents@latest setup
+npx rea-agents-nayte@latest setup
 ```
 
 หากใช้เอเจนต์ ให้ทำ[การปรับปรุงการตั้งค่า](#อัปเดต-rea) ให้เสร็จแล้วเริ่มเอเจนต์ใหม่ ลองงานเดิมอีกครั้ง หากยังพบปัญหา ให้[เปิด issue](https://github.com/morluto/rea/issues) พร้อมระบุรุ่น REA ประเภทเป้าหมาย ขั้นตอนทำให้เกิดปัญหา และข้อความข้อผิดพลาด

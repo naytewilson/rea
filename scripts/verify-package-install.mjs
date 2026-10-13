@@ -26,13 +26,16 @@ export async function verifyPackageInstall({
     { env: environment },
   );
   const cli = join(prefix, "bin", "rea");
-  const packageRunnerCli = join(prefix, "bin", "rea-agents");
+  const packageRunnerCli = join(prefix, "bin", "rea-agents-nayte");
+  const legacyCliAlias = join(prefix, "bin", "rea-agents");
   if (!(await run(packageRunnerCli, ["--help"], environment)).includes("setup"))
     throw new Error("packaged rea-agents alias did not expose setup");
+  if (!(await run(legacyCliAlias, ["--help"], environment)).includes("setup"))
+    throw new Error("packaged compatibility alias did not expose setup");
   const processCaptureCapabilityUrl = pathToFileURL(
     join(
       prefix,
-      "lib/node_modules/rea-agents/dist/process/capture/ProcessCaptureCapability.js",
+      "lib/node_modules/rea-agents-nayte/dist/process/capture/ProcessCaptureCapability.js",
     ),
   ).href;
   const processCaptureCapability = json(
@@ -70,7 +73,7 @@ export async function verifyPackageInstall({
   await rm(
     join(
       noOptionalPrefix,
-      "lib/node_modules/rea-agents/node_modules/@lydell",
+      "lib/node_modules/rea-agents-nayte/node_modules/@lydell",
       `node-pty-${process.platform}-${process.arch}`,
     ),
     { recursive: true, force: true },
@@ -78,7 +81,7 @@ export async function verifyPackageInstall({
   const noOptionalCapabilityUrl = pathToFileURL(
     join(
       noOptionalPrefix,
-      "lib/node_modules/rea-agents/dist/process/capture/ProcessCaptureCapability.js",
+      "lib/node_modules/rea-agents-nayte/dist/process/capture/ProcessCaptureCapability.js",
     ),
   ).href;
   const noOptionalCapability = json(
@@ -106,7 +109,10 @@ export async function verifyPackageInstall({
 }
 
 const verifyInstalledPackageCanRepack = async (prefix, environment) => {
-  const installedPackageRoot = join(prefix, "lib/node_modules/rea-agents");
+  const installedPackageRoot = join(
+    prefix,
+    "lib/node_modules/rea-agents-nayte",
+  );
   const repackedTarball = (
     await exec("npm", ["pack", "--silent"], {
       cwd: installedPackageRoot,
