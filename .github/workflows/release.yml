@@ -303,7 +303,8 @@ jobs:
           EXPECTED_RELEASE_SHA: ${{ needs.merged-release.outputs.sha || needs.release-please.outputs.sha }}
         run: |
           version="$(node --input-type=module -e 'import packageJson from "./package.json" with { type: "json" }; process.stdout.write(packageJson.version)')"
-          published_version="$(npm view "rea-agents@${version}" version --json 2>/dev/null || true)"
+          package_name="$(node --input-type=module -e 'import packageJson from "./package.json" with { type: "json" }; process.stdout.write(packageJson.name)')"
+          published_version="$(npm view "${package_name}@${version}" version --json 2>/dev/null || true)"
           if [ "${published_version}" = "\"${version}\"" ]; then
             # A registry match is not enough: require matching registry provenance identity.
             node scripts/verify-existing-published-release.mjs "${version}" "${EXPECTED_RELEASE_SHA}"
@@ -316,6 +317,7 @@ jobs:
         shell: bash
         run: |
           version="$(node --input-type=module -e 'import packageJson from "./package.json" with { type: "json" }; process.stdout.write(packageJson.version)')"
+          package_name="$(node --input-type=module -e 'import packageJson from "./package.json" with { type: "json" }; process.stdout.write(packageJson.name)')"
           verification_root="$(mktemp -d)"
           trap 'rm -rf -- "${verification_root}"' EXIT
           cd "${verification_root}"
@@ -323,21 +325,21 @@ jobs:
           sleep_seconds=15
           total_window_minutes=$((max_attempts * sleep_seconds / 60))
           for attempt in $(seq 1 "${max_attempts}"); do
-            published_version="$(npm view --prefer-online "rea-agents@${version}" version --json 2>/dev/null || true)"
+            published_version="$(npm view --prefer-online "${package_name}@${version}" version --json 2>/dev/null || true)"
             if [ "${published_version}" = "\"${version}\"" ]; then
-              echo "rea-agents@${version} is visible on npm after attempt ${attempt}/${max_attempts}; verifying the published CLI."
-              npm exec --yes --package="rea-agents@${version}" -- rea --help
-              npm exec --yes --package="rea-agents@${version}" -- rea --llms
+              echo "${package_name}@${version} is visible on npm after attempt ${attempt}/${max_attempts}; verifying the published CLI."
+              npm exec --yes --package="${package_name}@${version}" -- rea --help
+              npm exec --yes --package="${package_name}@${version}" -- rea --llms
               node "${GITHUB_WORKSPACE}/scripts/verify-published-package.mjs" "${version}"
               exit 0
             else
-              echo "rea-agents@${version} is not visible on npm yet (attempt ${attempt}/${max_attempts}; up to ${total_window_minutes} minutes)" >&2
+              echo "${package_name}@${version} is not visible on npm yet (attempt ${attempt}/${max_attempts}; up to ${total_window_minutes} minutes)" >&2
             fi
             if [ "${attempt}" -lt "${max_attempts}" ]; then
               sleep "${sleep_seconds}"
             fi
           done
-          echo "rea-agents@${version} did not become visible on npm within ${total_window_minutes} minutes (${max_attempts} attempts × ${sleep_seconds}s)" >&2
+          echo "${package_name}@${version} did not become visible on npm within ${total_window_minutes} minutes (${max_attempts} attempts × ${sleep_seconds}s)" >&2
           echo "This indicates npm registry propagation delay, not a CLI verification failure." >&2
           exit 1
 

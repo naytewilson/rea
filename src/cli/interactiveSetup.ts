@@ -225,7 +225,7 @@ const renderKeyboardHelp = (accessible: boolean): void => {
 };
 
 const cliInvocation = (environment: Readonly<NodeJS.ProcessEnv>): string =>
-  environment.npm_command === "exec" ? "npx rea-agents" : "rea";
+  environment.npm_command === "exec" ? "npx rea-agents-nayte" : "rea";
 
 const renderReadyCapabilities = (
   result: SetupResult,

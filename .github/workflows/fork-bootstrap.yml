@@ -1,0 +1,150 @@
+name: Publish independent fork
+on:
+  workflow_dispatch:
+    inputs:
+      source_sha:
+        description: Exact main commit for the independent 6.4.0 publication
+        required: true
+        type: string
+
+concurrency:
+  group: rea-fork-bootstrap-6.4.0
+  cancel-in-progress: false
+
+jobs:
+  publish:
+    name: Provenance-verified npm and MCP release
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      id-token: write
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: Require exact source and separate fork identity
+        env:
+          SOURCE_SHA: ${{ inputs.source_sha }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          if [[ "${GITHUB_REPOSITORY}" != "naytewilson/rea" || "${GITHUB_REF}" != "refs/heads/main" || "${SOURCE_SHA}" != "${GITHUB_SHA}" ]]; then
+            echo "Unexpected repository, ref, or release commit." >&2
+            exit 1
+          fi
+          node --input-type=module -e '
+            import { readFileSync } from "node:fs";
+            const p = JSON.parse(readFileSync("package.json", "utf8"));
+            const s = JSON.parse(readFileSync("server.json", "utf8"));
+            if (p.name !== "rea-agents-nayte" || p.version !== "6.4.0" ||
+                p.mcpName !== "io.github.naytewilson/rea" ||
+                p.repository?.url !== "git+https://github.com/naytewilson/rea.git" ||
+                s.name !== p.mcpName || s.version !== p.version ||
+                s.packages?.[0]?.identifier !== p.name || s.packages[0]?.version !== p.version)
+              throw new Error("Invalid independent fork metadata.");
+          '
+
+      - uses: actions/setup-node@v6
+        with:
+          node-version-file: .nvmrc
+          registry-url: https://registry.npmjs.org
+          package-manager-cache: false
+
+      - run: npm ci
+      - run: npm run metadata:check && npm run mcp-registry:check && npm run docs:check
+      - name: Build packaged Windows x64 controls
+        run: |
+          sudo apt-get update
+          sudo apt-get install --no-install-recommends -y g++-mingw-w64-x86-64
+          npm run build:windows-native
+          npm run verify:windows-native:artifact
+      - run: npm run verify:package
+
+      - name: Publish npm or resume only with exact matching provenance
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          status="$(curl --connect-timeout 10 --max-time 25 -sS -o /dev/null -w '%{http_code}' https://registry.npmjs.org/rea-agents-nayte/6.4.0)"
+          case "${status}" in
+            404)
+              node scripts/verify-unclaimed-release.mjs
+              npm publish --access public --provenance --tag latest
+              ;;
+            200)
+              node scripts/verify-existing-published-release.mjs 6.4.0 "${GITHUB_SHA}"
+              ;;
+            *) echo "Could not verify npm package state: HTTP ${status}" >&2; exit 1 ;;
+          esac
+
+      - name: Verify published provenance and live npm CLI and MCP
+        shell: bash
+        run: |
+          set -euo pipefail
+          for attempt in $(seq 1 20); do
+            if node scripts/verify-existing-published-release.mjs 6.4.0 "${GITHUB_SHA}"; then
+              node scripts/verify-published-package.mjs 6.4.0
+              npm exec --yes --package=rea-agents-nayte@6.4.0 -- rea --help
+              npm exec --yes --package=rea-agents-nayte@6.4.0 -- rea --llms
+              exit 0
+            fi
+            if [[ "${attempt}" != 20 ]]; then sleep 15; fi
+          done
+          echo "npm source provenance never became verifiable." >&2
+          exit 1
+
+      - name: Publish or recover independent MCP Registry entry
+        shell: bash
+        run: |
+          set -euo pipefail
+          status="$(node scripts/check-published-mcp-release.mjs)"
+          case "${status}" in
+            matching) echo "Matching MCP entry already published." ;;
+            missing)
+              archive=mcp-publisher_linux_amd64.tar.gz
+              curl -fsSLo "${archive}" "https://github.com/modelcontextprotocol/registry/releases/download/v1.8.0/${archive}"
+              echo "1370446bbe74d562608e8005a6ccce02d146a661fbd78674e11cc70b9618d6cf  ${archive}" | sha256sum --check --strict
+              tar xzf "${archive}" mcp-publisher
+              chmod +x mcp-publisher
+              ./mcp-publisher validate
+              ./mcp-publisher login github-oidc
+              ./mcp-publisher publish
+              ;;
+            *) echo "Unknown MCP state: ${status}" >&2; exit 1 ;;
+          esac
+
+      - name: Require public MCP Registry confirmation
+        shell: bash
+        run: |
+          set -euo pipefail
+          for attempt in $(seq 1 20); do
+            status="$(node scripts/check-published-mcp-release.mjs)"
+            if [[ "${status}" == matching ]]; then exit 0; fi
+            if [[ "${attempt}" != 20 ]]; then sleep 15; fi
+          done
+          echo "MCP entry never became verifiably published." >&2
+          exit 1
+
+      - name: Create source-pinned tag and canonical GitHub release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          tag=rea-agents-nayte-6.4.0
+          actual="$(gh api "repos/${GITHUB_REPOSITORY}/git/ref/tags/${tag}" --jq .object.sha 2>/dev/null || true)"
+          if [[ -n "${actual}" && "${actual}" != "${GITHUB_SHA}" ]]; then
+            echo "Tag collision with different source." >&2
+            exit 1
+          fi
+          if [[ -z "${actual}" ]]; then
+            gh api -X POST "repos/${GITHUB_REPOSITORY}/git/refs" -f ref="refs/tags/${tag}" -f sha="${GITHUB_SHA}" >/dev/null
+          fi
+          test "$(gh api "repos/${GITHUB_REPOSITORY}/git/ref/tags/${tag}" --jq .object.sha)" = "${GITHUB_SHA}"
+          if ! gh release view "${tag}" --repo "${GITHUB_REPOSITORY}" --json tagName >/dev/null 2>&1; then
+            gh release create "${tag}" --repo "${GITHUB_REPOSITORY}" --verify-tag --target "${GITHUB_SHA}" --title "REA 6.4.0 - independent npm and MCP release" --notes "Fork package rea-agents-nayte@6.4.0 and MCP io.github.naytewilson/rea, published with exact GitHub source provenance ${GITHUB_SHA}. The upstream rea-agents@6.4.0 is a different artifact."
+          fi
+          gh release view "${tag}" --repo "${GITHUB_REPOSITORY}" --json url,isDraft,isPrerelease

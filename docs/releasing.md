@@ -218,3 +218,38 @@ tag. Do not dispatch a fresh publish phase to repair an already-created
 release: Release Please will not create the same release again. Do not move
 the tag, delete the release, or unpublish npm as a retry. A defective public
 package requires a reviewed correction and a new version.
+
+## Independent fork 6.4.0 bootstrap
+
+The public `rea-agents@6.4.0` npm artifact and `io.github.morluto/rea` MCP
+Registry entry belong to upstream `morluto/rea`, not to this GitHub fork. The
+fork's independently reviewed 6.4.0 build is available as the checksummed
+GitHub-only prerelease `fork-build-rea-agents-6.4.0` at merge commit
+`3d87d5df6cca1c5d4bf84b8025cf0ced07b171fb`. This artifact is intentionally
+not represented as a fork npm or MCP publication.
+
+For separately owned distribution, the fork's package metadata uses npm
+`rea-agents-nayte@6.4.0`, MCP `io.github.naytewilson/rea`, and matching CLI
+aliases. Their first public publication is controlled by
+`.github/workflows/fork-bootstrap.yml`. The repository owner must first make
+an npm publisher authorized to publish the unclaimed `rea-agents-nayte`
+package available to GitHub Actions, such as a scoped npm publishing token
+stored in repository Actions secrets as `NPM_TOKEN`; do not place the token in
+a commit, issue, PR, chat or log. If npm trusted publishing is used instead,
+its trusted publisher configuration must already be valid for this package.
+
+Dispatch **Publish independent fork** from `main` with `source_sha` set to
+the exact verified `main` commit containing the independent fork metadata.
+The workflow refuses another repository, branch or SHA, verifies the package
+and bundled Windows controls, publishes npm with provenance only if the
+package/version is unclaimed, and requires matching registry-hosted source
+provenance before running live CLI and MCP checks. It then publishes/verifies
+the independent MCP Registry entry through GitHub OIDC, and only afterward
+creates the exact-SHA tag `rea-agents-nayte-6.4.0` and GitHub release. Retries
+may reuse existing npm/MCP artifacts only if their identities match; no
+existing upstream package or conflicting tag may be adopted or overwritten.
+
+Missing npm publishing authority is a real external release prerequisite,
+not a reason to disable the checks or assert that npm or MCP publication has
+already happened. The separately qualified GitHub-only artifact remains usable
+while that authorization is pending.

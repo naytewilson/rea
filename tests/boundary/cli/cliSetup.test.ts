@@ -217,7 +217,7 @@ describe("interactive setup journey", () => {
 describe("interactive setup completion", () => {
   it.each([
     { npmCommand: "", launcher: "rea" },
-    { npmCommand: "exec", launcher: "npx rea-agents" },
+    { npmCommand: "exec", launcher: "npx rea-agents-nayte" },
   ])(
     "prints an available next command for $launcher invocation",
     async ({ npmCommand, launcher }) => {

@@ -22,7 +22,7 @@
 
 [快速开始](#快速开始) · [REA 的工作原理](#rea-的工作原理) · [可以分析什么](#可以分析什么) · [案例](#案例) · [常见问题](#常见问题) · [文档](#文档)
 
-<code>npx rea-agents setup</code>
+<code>npx rea-agents-nayte setup</code>
 
 <br />
 
@@ -63,7 +63,7 @@ REA 将智能体连接到分析工具，用于检查原生二进制文件、Java
 安装 Node.js 和 npm 后，运行：
 
 ```bash
-npx rea-agents setup
+npx rea-agents-nayte setup
 ```
 
 选择智能体，检查计划中的变更并批准。设置流程会添加 REA 的 MCP 服务和匹配的工作流指引，并备份已有配置。完成后重启智能体。
@@ -83,7 +83,7 @@ npx rea-agents setup
 检查已解包的 JavaScript/Electron 应用目录或 ASAR 文件：
 
 ```bash
-npx -y rea-agents@latest analyze-javascript-application /absolute/path/to/app --json
+npx -y rea-agents-nayte@latest analyze-javascript-application /absolute/path/to/app --json
 ```
 
 结果包含模块、导入、Electron 边界及相关证据。将路径替换为你的目标路径，例如 Windows 上的 `"D:/apps/example"`。
@@ -91,7 +91,7 @@ npx -y rea-agents@latest analyze-javascript-application /absolute/path/to/app --
 如果需要经常使用，可以安装 `rea` 命令：
 
 ```bash
-npm install --global rea-agents
+npm install --global rea-agents-nayte
 rea --help
 ```
 
@@ -112,10 +112,10 @@ rea update
 如果使用 `npx`，通过以下命令更新智能体设置：
 
 ```bash
-npx rea-agents@latest setup
+npx rea-agents-nayte@latest setup
 ```
 
-检查设置变更并重启智能体。单次 CLI 操作可使用 `npx rea-agents@latest`，后接所需命令。
+检查设置变更并重启智能体。单次 CLI 操作可使用 `npx rea-agents-nayte@latest`，后接所需命令。
 
 ## REA 的工作原理
 
@@ -207,7 +207,7 @@ REA 会在操作需要时启动 Hopper。在 macOS 上，首次运行时可能�
 <details>
 <summary><strong>从 skills.sh 安装 skill 有什么作用？</strong></summary>
 
-skill 为智能体提供调查指引。使用 `npx rea-agents setup` 注册 REA 的 MCP 服务并安装匹配的指引，然后重启智能体。见[仅安装 skill](docs/installation.md#skill-only-installation)。
+skill 为智能体提供调查指引。使用 `npx rea-agents-nayte setup` 注册 REA 的 MCP 服务并安装匹配的指引，然后重启智能体。见[仅安装 skill](docs/installation.md#skill-only-installation)。
 
 </details>
 
@@ -239,7 +239,7 @@ rea update
 通过 `npx` 设置智能体时使用：
 
 ```bash
-npx rea-agents@latest setup
+npx rea-agents-nayte@latest setup
 ```
 
 如果正在使用智能体，请完成[设置更新](#更新-rea)并重启智能体。重试同一任务。如果问题仍然存在，请[提交 issue](https://github.com/morluto/rea/issues)，附上 REA 版本、目标类型、复现步骤和错误输出。

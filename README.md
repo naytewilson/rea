@@ -18,11 +18,11 @@
 
 <a href="https://trendshift.io/repositories/82054?utm_source=repository-badge&amp;utm_medium=badge&amp;utm_campaign=badge-repository-82054" target="_blank" rel="noopener noreferrer"><img src="https://trendshift.io/api/badge/repositories/82054" alt="morluto%2Frea | Trendshift" width="250" height="55"/></a>
 
-**[Website](https://rea.tools/) · [Guides](https://rea.tools/guides/) · [Showcases](https://rea.tools/showcase/)**
+**[Upstream Website](https://rea.tools/) · [Guides](https://rea.tools/guides/) · [Showcases](https://rea.tools/showcase/)**
 
 [Quick start](#quick-start) · [How REA works](#how-rea-works) · [What you can analyze](#what-you-can-analyze) · [Showcases](#showcases) · [FAQ](#faq) · [Documentation](#documentation)
 
-<code>npx rea-agents setup</code>
+<code>npx rea-agents-nayte setup</code>
 
 <br />
 
@@ -56,6 +56,10 @@ Setup registers REA with your agent and installs matching workflow instructions.
 
 > **[Visit the REA website](https://rea.tools/)** for setup instructions, illustrated guides, and real case studies.
 
+## Fork distribution status
+
+This is the `naytewilson/rea` fork of upstream `morluto/rea`. The npm package `rea-agents@6.4.0` and MCP Registry name `io.github.morluto/rea` are **upstream releases**, not binaries built from this fork. This fork uses independent package name `rea-agents-nayte` and MCP name `io.github.naytewilson/rea`; neither should be described as published until its own registry publication is verified. For the independently qualified 6.4.0 fork artifact, install the checksummed tarball from the GitHub-only release at `https://github.com/naytewilson/rea/releases/tag/fork-build-rea-agents-6.4.0`. The npm commands below become usable after the separate package is actually published. The npm and CI badges above report upstream, not the fork.
+
 ## Quick start
 
 ### Set up your agent
@@ -63,7 +67,7 @@ Setup registers REA with your agent and installs matching workflow instructions.
 With Node.js and npm installed, run:
 
 ```bash
-npx rea-agents setup
+npx rea-agents-nayte setup
 ```
 
 Choose your agents, review the proposed changes, and approve them. Setup adds
@@ -89,7 +93,7 @@ Replace Notes with your target app and the feature you want to understand.
 Inspect an extracted JavaScript/Electron app directory or ASAR:
 
 ```bash
-npx -y rea-agents@latest analyze-javascript-application /absolute/path/to/app --json
+npx -y rea-agents-nayte@latest analyze-javascript-application /absolute/path/to/app --json
 ```
 
 The result includes modules, imports, Electron boundaries and their evidence.
@@ -98,7 +102,7 @@ Replace the path with your target, such as `"D:/apps/example"` on Windows.
 To install the `rea` command for regular use:
 
 ```bash
-npm install --global rea-agents
+npm install --global rea-agents-nayte
 rea --help
 ```
 
@@ -123,11 +127,11 @@ by the update.
 If you use `npx`, update your agent setup with:
 
 ```bash
-npx rea-agents@latest setup
+npx rea-agents-nayte@latest setup
 ```
 
 Review the setup changes and restart your agent. For one-off CLI commands,
-use `npx rea-agents@latest` followed by the command.
+use `npx rea-agents-nayte@latest` followed by the command.
 
 ## How REA works
 
@@ -248,7 +252,7 @@ ask you to choose demo mode or activate your license. See
 <details>
 <summary><strong>What does installing the skill from skills.sh do?</strong></summary>
 
-The skill supplies investigation instructions for your agent. Use `npx rea-agents setup`
+The skill supplies investigation instructions for your agent. Use `npx rea-agents-nayte setup`
 to register REA's MCP server and install the matching instructions, then restart
 your agent. See [skill-only installation](docs/installation.md#skill-only-installation).
 
@@ -285,7 +289,7 @@ rea update
 For agent setup through `npx`:
 
 ```bash
-npx rea-agents@latest setup
+npx rea-agents-nayte@latest setup
 ```
 
 If you're using an agent, complete the [setup refresh](#update-rea) and restart

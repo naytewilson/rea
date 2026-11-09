@@ -1,5 +1,7 @@
 # Installation and setup
 
+**Fork package availability:** `rea-agents-nayte` is the independent npm identity for `naytewilson/rea`. This identity is prepared but is not yet published to the npm Registry. Until publication, install the verified source-compatible [6.4.0 fork tarball](https://github.com/naytewilson/rea/releases/tag/fork-build-rea-agents-6.4.0), or use a verified local source checkout. npm examples below only work once the independent package is available. Public `rea-agents` refers to the upstream project, which ships different bytes.
+
 REA separates installing its CLI from configuring external software and agents.
 
 ## Start setup
@@ -7,7 +9,7 @@ REA separates installing its CLI from configuring external software and agents.
 Start setup with:
 
 ```bash
-npx rea-agents setup
+npx rea-agents-nayte setup
 ```
 
 If npm asks to download and run REA, that approval applies only to downloading
@@ -18,7 +20,7 @@ The short command can use a REA version installed in the current project. To
 request the latest release explicitly, use:
 
 ```bash
-npx rea-agents@latest setup
+npx rea-agents-nayte@latest setup
 ```
 
 REA runs the version npm selects. To update older agent registrations, run the
@@ -29,7 +31,7 @@ setup changes.
 For an intentional rollback, make the package request explicit:
 
 ```bash
-npm exec --yes --package=rea-agents@2.4.0 -- rea setup
+npm exec --yes --package=rea-agents-nayte@<published-version> -- rea setup
 ```
 
 Setup continues to pin persistent MCP registrations to the exact version that
@@ -38,16 +40,16 @@ managed registrations through the normal reviewed setup transaction.
 
 REA supports Node.js 22.x (>=22.19), 24.x (>=24.11), and 26+. Node.js 23, 25, and prereleases are unsupported. It uses the npm already paired with that runtime and never upgrades Node.js, npm, or Homebrew.
 
-Running `npm install rea-agents` without `--global` installs the executable only
+Running `npm install rea-agents-nayte` without `--global` installs the executable only
 in the current project's `node_modules/.bin`; it does not make `rea` available
 on the shell `PATH`. Use the setup command above for the guided setup
-journey, `npx -y rea-agents@latest` for unattended one-off commands, or install globally
-with `npm install --global rea-agents` for a shell-visible `rea` command.
+journey, `npx -y rea-agents-nayte@latest` for unattended one-off commands, or install globally
+with `npm install --global rea-agents-nayte` for a shell-visible `rea` command.
 
 The optional curl wrapper installs only the global npm package:
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/morluto/rea/main/install.sh | bash
+curl -fsSL https://raw.githubusercontent.com/naytewilson/rea/main/install.sh | bash
 ```
 
 It prints the version, runtime, npm command, and destination before installing. When a controlling terminal exists it starts `rea setup`; otherwise it prints the command to run later.
@@ -55,7 +57,7 @@ It prints the version, runtime, npm command, and destination before installing. 
 Pass options with `bash -s --`:
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/morluto/rea/main/install.sh |
+curl -fsSL https://raw.githubusercontent.com/naytewilson/rea/main/install.sh |
   bash -s -- --dry-run
 ```
 
@@ -89,7 +91,7 @@ release containing changes after this checkpoint is required for newer
 functionality. Package startup alone does not verify a provider's real
 platform workflow.
 
-To check the published version, run `npm view rea-agents dist-tags.latest`.
+To check the fork publishing status, run `npm view rea-agents-nayte dist-tags.latest`. The upstream package is distinct.
 Use the connected server's actual tool list and advertised input schemas for
 feature selection. The same package version string in a development checkout
 does not establish that its bytes match the npm tarball. Update a registration
@@ -117,7 +119,7 @@ and the release boundary above. Static JavaScript CLI inspection can proceed
 while MCP is unavailable:
 
 ```bash
-npx -y rea-agents@latest analyze-javascript-application /absolute/path/to/app --json
+npx -y rea-agents-nayte@latest analyze-javascript-application /absolute/path/to/app --json
 ```
 
 It returns the complete Evidence record directly and requires no native engine.
@@ -264,7 +266,7 @@ and replace the executable paths with absolute paths from your installation:
 ```
 
 For a global npm installation, the launcher is under
-`$(npm root -g)/rea-agents/scripts/rea.mjs`. Check the Node executable with
+`$(npm root -g)/rea-agents-nayte/scripts/rea.mjs`. Check the Node executable with
 `command -v node`. Register `serverName: rea` only once in each active profile,
 then restart Harness. It exposes tools as `mcp__rea__<tool_name>`.
 Run `rea setup --skill --dry-run`, review the destination, then
@@ -309,7 +311,7 @@ the data directory as aligned. Ask the Grok Bot chat to add a custom MCP
 server named `rea` that runs on the Bot's computer:
 
 ```bash
-npx -y rea-agents@<version> mcp
+npx -y rea-agents-nayte@<version> mcp
 ```
 
 Do not put credentials in that command or its arguments. `rea doctor --client grok_bot`
@@ -808,7 +810,7 @@ Ghidra/JDK installation; neither is inferred from startup alone.
 
 ## Diagnose, update, and remove
 
-`rea doctor --json` is strictly read-only. `rea update` updates only the npm installation that owns the running CLI. Source checkouts and package-runner copies must be updated through the mechanism that owns them; a fresh package-runner invocation can use `npx rea-agents@latest`. `rea uninstall` removes only REA-owned agent registrations and skill files; `--purge-data` additionally removes REA cache and state paths.
+`rea doctor --json` is strictly read-only. `rea update` updates only the npm installation that owns the running CLI. Source checkouts and package-runner copies must be updated through the mechanism that owns them; a fresh package-runner invocation can use `npx rea-agents-nayte@latest`. `rea uninstall` removes only REA-owned agent registrations and skill files; `--purge-data` additionally removes REA cache and state paths.
 
 ```bash
 rea update
@@ -827,13 +829,7 @@ REA's managed shared and Claude Code personal skill locations. See the
 
 ## MCP Registry
 
-REA is published in the official MCP Registry as `io.github.morluto/rea`. Registry
-clients can discover the server and install the existing public `rea-agents` npm
-package; the Registry entry does not introduce a second distribution artifact.
-
-For a client that supports Registry discovery, search for `io.github.morluto/rea`
-and select the npm package. The published metadata launches the existing stdio
-server through `npx` with the `mcp` command.
+The upstream project is published as `io.github.morluto/rea` and references its own `rea-agents` npm package. The independently named fork declares `io.github.naytewilson/rea` with npm identifier `rea-agents-nayte`, but this fork entry is **not yet published** in the public MCP Registry. After verified publication, select that separate fork identity. The intended metadata launches the stdio server through `npx` with the `mcp` command.
 
 For a client that requires manual configuration, use:
 
@@ -844,7 +840,7 @@ For a client that requires manual configuration, use:
   "mcpServers": {
     "rea": {
       "command": "npx",
-      "args": ["-y", "rea-agents@6.4.0", "mcp"]
+      "args": ["-y", "rea-agents-nayte@6.4.0", "mcp"]
     }
   }
 }

@@ -1,4 +1,5 @@
 #!/usr/bin/env node
+import { readFile } from "node:fs/promises";
 import { requireMatchingPublishedRelease } from "./lib/published-release-identity.mjs";
 
 const [version, sourceSha] = process.argv.slice(2);
@@ -28,7 +29,7 @@ async function readRegistryJson(url) {
 }
 
 try {
-  const packageName = "rea-agents";
+  const packageName = JSON.parse(await readFile("package.json", "utf8")).name;
   const metadata = await readRegistryJson(
     `https://registry.npmjs.org/${packageName}/${encodeURIComponent(version ?? "")}`,
   );

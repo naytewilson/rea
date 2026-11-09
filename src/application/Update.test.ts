@@ -18,7 +18,7 @@ class FakeUpdateHost implements UpdateHost {
   release: Result<string, ReleaseLookupFailure> = ok("3.3.0");
   installationResult: NpmInstallation | undefined = {
     prefix: "/fixture",
-    packageRoot: "/fixture/lib/node_modules/rea-agents",
+    packageRoot: "/fixture/lib/node_modules/rea-agents-nayte",
   };
   installResult: Result<void, string> = ok(undefined);
   verified: Result<string, string> = ok("3.3.0");
@@ -97,7 +97,7 @@ describe("REA update", () => {
         "--ignore-scripts",
         "--prefix",
         "/fixture",
-        "rea-agents@3.3.0",
+        "rea-agents-nayte@3.3.0",
       ],
     });
     expect(host.installedVersions).toEqual(["3.3.0"]);
@@ -275,12 +275,16 @@ describe("update failures and version boundaries", () => {
 
   it("reports actual npm failures and skips verification", async () => {
     const host = new FakeUpdateHost();
-    host.installResult = err("EACCES /fixture/lib/node_modules/rea-agents");
+    host.installResult = err(
+      "EACCES /fixture/lib/node_modules/rea-agents-nayte",
+    );
     const result = await runUpdate("3.2.1", host);
     expect(result).toMatchObject({ status: "failed", reason: "install" });
     expect(result).toHaveProperty(
       "remediation",
-      expect.stringContaining("EACCES /fixture/lib/node_modules/rea-agents"),
+      expect.stringContaining(
+        "EACCES /fixture/lib/node_modules/rea-agents-nayte",
+      ),
     );
     expect(host.verifiedInstallation).toBeUndefined();
   });
@@ -294,14 +298,14 @@ describe("npm installation ownership", () => {
   });
 
   it("identifies the global prefix and package root", async () => {
-    const packageRoot = "/usr/local/lib/node_modules/rea-agents";
+    const packageRoot = "/usr/local/lib/node_modules/rea-agents-nayte";
     await expect(
       detectNpmInstallation(packageRoot, host("/usr/local/lib/node_modules")),
     ).resolves.toEqual({ prefix: "/usr/local", packageRoot });
   });
 
   it("retains the curl installer's custom Unix prefix", async () => {
-    const packageRoot = "/home/user/.local/lib/node_modules/rea-agents";
+    const packageRoot = "/home/user/.local/lib/node_modules/rea-agents-nayte";
     await expect(
       detectNpmInstallation(packageRoot, host("/usr/local/lib/node_modules")),
     ).resolves.toEqual({ prefix: "/home/user/.local", packageRoot });
@@ -324,7 +328,7 @@ describe("npm installation ownership", () => {
     };
     await expect(
       detectNpmInstallation(
-        "/home/.local/lib/node_modules/rea-agents",
+        "/home/.local/lib/node_modules/rea-agents-nayte",
         failing,
       ),
     ).resolves.toBeUndefined();
